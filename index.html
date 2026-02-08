@@ -47,7 +47,6 @@ p {
     border-radius: 20px;
     background: #fff;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
 #fill {
@@ -61,7 +60,6 @@ p {
     position: absolute;
     bottom: 30px;
     font-size: 3em;
-    left: 45%;
 }
 
 /* Hearts */
@@ -122,10 +120,11 @@ p {
     margin-top: 35vh;
 }
 
-/* Image */
-#photo {
+/* IMAGE — FIXED */
+.photo {
     width: 80%;
     max-width: 520px;
+    margin-top: 40px;
     border-radius: 30px;
     box-shadow: 0 0 40px rgba(255,0,90,0.45);
 }
@@ -133,10 +132,6 @@ p {
 </head>
 
 <body>
-
-<audio autoplay loop>
-    <source src="PUT_MUSIC_LINK_HERE" type="audio/mpeg">
-</audio>
 
 <!-- PAGE 1: GAME -->
 <div id="page0" class="page active">
@@ -156,11 +151,15 @@ p {
 <!-- PAGE 3 -->
 <div id="page2" class="page">
     <h1>Happy Propose Day 💘</h1>
-    <p>ILOVEYOU VIVAA, hoping for more time together, more conversations, more candy floss, more popsicles and everything else.✨</p>
+    <p>ILOVEYOU VIVAA, hoping for more time together, more conversations, more candy floss, more popsicles and everything else ✨</p>
     <img src="us.jpeg" alt="Us together" class="photo">
 </div>
 
 <script>
+const page0 = document.getElementById("page0");
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+
 /* Floating Emojis */
 const emojis = ["🎈","❤️","💖","💘","✨","🌸","🎀"];
 for (let i = 0; i < 60; i++) {
@@ -193,19 +192,15 @@ function dropHeart() {
         const hb = h.getBoundingClientRect();
         const bb = basket.getBoundingClientRect();
 
-        if (
-            hb.bottom > bb.top &&
-            hb.left > bb.left &&
-            hb.right < bb.right
-        ) {
+        if (hb.bottom > bb.top && hb.left > bb.left && hb.right < bb.right) {
             fill += 10;
             fillBar.style.width = fill + "%";
             h.remove();
             clearInterval(check);
 
             if (fill >= 100) {
-                document.getElementById("page0").classList.remove("active");
-                document.getElementById("page1").classList.add("active");
+                page0.classList.remove("active");
+                page1.classList.add("active");
             }
         }
     }, 50);
