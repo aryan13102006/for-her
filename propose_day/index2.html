@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #ffd1dc, #ffb6c1);
+    overflow: hidden;
+}
+
+.page {
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    position: relative;
+    text-align: center;
+}
+
+.active { display: block; }
+
+h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4em;
+    color: #b30047;
+    margin-top: 60px;
+}
+
+p {
+    font-family: 'Playfair Display', serif;
+    color: #7a0033;
+    font-size: 1.3em;
+}
+
+/* LOVE METER */
+#meter {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 180px;
+    height: 25px;
+    border-radius: 20px;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+#fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, #ff4d79, #ff99aa);
+}
+
+/* Basket */
+#basket {
+    position: absolute;
+    bottom: 30px;
+    font-size: 3em;
+    left: 45%;
+}
+
+/* Hearts */
+.heart {
+    position: absolute;
+    font-size: 2em;
+    animation: fall linear;
+}
+
+@keyframes fall {
+    from { top: -10vh; }
+    to { top: 110vh; }
+}
+
+/* Buttons */
+.btn {
+    padding: 14px 45px;
+    font-size: 1.3em;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+}
+
+#yesBtn {
+    background: #ff4d79;
+    color: white;
+    left: 35%;
+    top: 55%;
+}
+
+#noBtn {
+    background: #fff;
+    color: #ff4d79;
+    left: 55%;
+    top: 55%;
+}
+
+/* Emojis */
+.emoji {
+    position: absolute;
+    font-size: 2.2rem;
+    animation: float 12s infinite linear;
+    opacity: 0.7;
+}
+
+@keyframes float {
+    from { transform: translateY(110vh); }
+    to { transform: translateY(-10vh); }
+}
+
+/* Celebration */
+#celebrate {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4.5em;
+    color: #ff004f;
+    margin-top: 35vh;
+}
+
+/* Image */
+#photo {
+    width: 80%;
+    max-width: 520px;
+    border-radius: 30px;
+    box-shadow: 0 0 40px rgba(255,0,90,0.45);
+}
+</style>
+</head>
+
+<body>
+
+<audio autoplay loop>
+    <source src="PUT_MUSIC_LINK_HERE" type="audio/mpeg">
+</audio>
+
+<!-- PAGE 1: GAME -->
+<div id="page0" class="page active">
+    <h1>Catch My Love 💕</h1>
+    <p>Fill the love meter by catching hearts 💖</p>
+    <div id="meter"><div id="fill"></div></div>
+    <div id="basket">🧺</div>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page1" class="page">
+    <h1>Will you be my Valentine? 💖</h1>
+    <button id="yesBtn" class="btn">Yes, always 💕</button>
+    <button id="noBtn" class="btn">No 💔</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page2" class="page">
+    <h1>Happy Propose Day 💘</h1>
+    <p>ILOVEYOU VIVAA, hoping for more time together, more conversations, more candy floss, more popsicles and everything else.✨</p>
+    <img id="photo" src="us.jpeg">
+</div>
+
+<script>
+/* Floating Emojis */
+const emojis = ["🎈","❤️","💖","💘","✨","🌸","🎀"];
+for (let i = 0; i < 60; i++) {
+    let e = document.createElement("div");
+    e.className = "emoji";
+    e.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left = Math.random()*100 + "vw";
+    e.style.animationDuration = (8 + Math.random()*8) + "s";
+    document.body.appendChild(e);
+}
+
+/* GAME LOGIC */
+let fill = 0;
+const fillBar = document.getElementById("fill");
+const basket = document.getElementById("basket");
+
+document.addEventListener("mousemove", e => {
+    basket.style.left = e.clientX - 20 + "px";
+});
+
+function dropHeart() {
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random()*100 + "vw";
+    h.style.animationDuration = (3 + Math.random()*2) + "s";
+    document.body.appendChild(h);
+
+    let check = setInterval(() => {
+        const hb = h.getBoundingClientRect();
+        const bb = basket.getBoundingClientRect();
+
+        if (
+            hb.bottom > bb.top &&
+            hb.left > bb.left &&
+            hb.right < bb.right
+        ) {
+            fill += 10;
+            fillBar.style.width = fill + "%";
+            h.remove();
+            clearInterval(check);
+
+            if (fill >= 100) {
+                document.getElementById("page0").classList.remove("active");
+                document.getElementById("page1").classList.add("active");
+            }
+        }
+    }, 50);
+
+    setTimeout(()=>h.remove(),6000);
+}
+setInterval(dropHeart, 800);
+
+/* NO button escape */
+const noBtn = document.getElementById("noBtn");
+document.addEventListener("mousemove", e => {
+    const r = noBtn.getBoundingClientRect();
+    const d = Math.hypot(
+        e.clientX - (r.left + r.width/2),
+        e.clientY - (r.top + r.height/2)
+    );
+    if (d < 140) {
+        noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+        noBtn.style.top = Math.random() * (window.innerHeight - 80) + "px";
+    }
+});
+
+/* YES */
+document.getElementById("yesBtn").onclick = () => {
+    page1.innerHTML = "<div id='celebrate'>She said YES 💖✨</div>";
+    setTimeout(()=>{
+        page1.classList.remove("active");
+        page2.classList.add("active");
+    },2000);
+};
+</script>
+
+</body>
+</html>
